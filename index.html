@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html style="width: 100%; height: 100%; margin: 0; padding: 0; border: 0">
+    <head>
+        <title>Example Clickjacking Site</title>
+    </head>
+    <body style="width: 100%; height: 100%; margin: 0; padding: 0; border: 0">
+        <div id="example" style="width: 100%; height: 100%; margin: 0; padding: 0; border: 0; display: none">
+            <button style="position: absolute; top: 50px; left: 60px" onclick="console.log('Your click is safe')">Click Here</button>
+            <iframe id="mainFrame" src="about:blank" frameborder="0" style="width: 50%; height: 50%; margin: 0; padding: 0; border: 0; position: absolute; opacity: 0.01;" onkeydown="console.log('Pressed key - ' + event.which)">
+            </iframe>
+            <div id="userNotice"></div>
+        </div>
+        <div id="explanation">
+            <h1>Clickjacking Example</h1>
+            <p>
+                    This site is an example of a clickjacking site for use with the Umbraco Security training course.  It demonstrates one method of clickjacking, and course attendees are shown how to prevent against this method.  For more information, please see the <a href="https://umbraco.com/training/course-details/security/">security course details</a>.
+            </p>
+        </div>
+        <script type="text/javascript">
+        var urlParameters = {};
+        window.location.href.replace(/[?&]([^=&]+)(=([^&]*))?/gi, function(match, key, valuePhrase, value) {
+            urlParameters[decodeURIComponent(key)] = value ? decodeURIComponent(value) : null;
+        });
+        var extUrl = urlParameters["url"]
+
+        if (extUrl) {
+            var frm = document.getElementById('mainFrame');
+            frm.src = extUrl;
+
+            var exa = document.getElementById('example');
+            exa.style.display = 'block';
+
+            var exp = document.getElementById('explanation');
+            exp.style.display = 'none';
+        }
+        </script>
+    </body>
+</html>
